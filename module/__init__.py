@@ -1,6 +1,6 @@
 #from .strategies import RandomStrategy
 #from .strategies import *
-from strategies  import *
+from .strategies  import *
 from soccersimulator import SoccerTeam
 
 def get_team(nb_players):

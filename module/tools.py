@@ -23,9 +23,9 @@ class Tools(object):
 			self.cage_adv = Vector2D(0,GAME_HEIGHT/2.)
 
 		self.ball_position = self.state.ball.position
-        	self.ball_vitesse = self.state.ball.vitesse
+		self.ball_vitesse = self.state.ball.vitesse
 		self.p_position = self.state.player_state(id_team,id_player).position
-		self.nb_players=state.nb_players(1)
+		self.nb_players = state.nb_players(1)
 
 
 	def goto(self, position):
