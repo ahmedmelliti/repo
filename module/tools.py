@@ -56,3 +56,12 @@ class Tools(object):
                 		adv = i
         	return self.state.player_state(self.id_adverse_team,adv).position
 
+	def interception(self):
+		playergauche = 0
+		playerdroit = 0
+		for i in range(self.nb_players):
+			if self.state.player_state(self.id_adverse_team,i).position.x <= self.state.player_state(self.id_adverse_team,playergauche).position.x:
+				playergauche = i
+			if self.state.player_state(self.id_adverse_team,i).position.x > self.state.player_state(self.id_adverse_team,playerdroit).position.x:
+				playerdroit = i
+			return (self.state.player_state(self.id_adverse_team,playerdroit).position + self.state.player_state(self.id_adverse_team,playergauche).position)/2
