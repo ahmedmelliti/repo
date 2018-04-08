@@ -8,9 +8,9 @@ def get_team(nb_players):
     #for i in range(nb_players):
     #    myteam.add("Joueur "+str(i) ,FonceurStrategy())
 	if nb_players==1:
-		myteam.add("Joueur "+str(0) ,FonceurStrategy())
+		myteam.add("Joueur "+str(0) ,Arbre())
 	if nb_players==2:
-		myteam.add("Joueur "+str(0) ,Defenseur())
+		myteam.add("Joueur "+str(0) ,Arbre())
 		myteam.add("Joueur "+str(1) ,FonceurStrategy())
 	if nb_players==4:
 		myteam.add("Joueur "+str(0) ,Defenseur())
