@@ -192,6 +192,19 @@ class Defenseur(Strategy):
 			return SoccerAction(t.goto(t.ball_position + t.ball_vitesse))
 		else:
 			return SoccerAction(t.goto(t.cage_adv))
-		
+
+from tools import my_get_features
+
+class Arbre(DTreeStrategy):
+        def __init__(self):
+                #Strategy.__init__(self,"Defenseur")
+
+                dic_strategy = {FonceurStrategy().name:FonceurStrategy(),Milieu().name:Milieu(),Gardien().name:Gardien()}
+
+                with open("tree_test.pkl","rb") as f:
+                        dt = pickle.load(f)
+
+                DTreeStrategy.__init__(self, dt, dic_strategy, my_get_features)
+
 
 		
