@@ -231,3 +231,4 @@ class Arbre(DTreeStrategy):
                         dt = pickle.load(f)
 
                 DTreeStrategy.__init__(self, dt, dic_strategy, my_get_features)
+
