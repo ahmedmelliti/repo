@@ -45,6 +45,8 @@ class Tools(object):
 	def dbp(self):
 		return self.p_position.distance(self.ball_position)
 
+	def dist(self,p):
+		return self.p_position.distance(p)
 
 	def canshoot(self):
 		return self.dbp()>=PLAYER_RADIUS+BALL_RADIUS
@@ -109,3 +111,20 @@ class Tools(object):
 	
 	def ball_avant_adv_avc(self):
 		return self.p_position.distance(self.ball_position + self.vitesse) < self.p_position.distance(self.adv_le_plus_proche() + self.adv_le_plus_proche_vitesse())+20
+
+
+def my_get_features(state,idt,idp):
+        """ extraction du vecteur de features d'un etat, ici distance a la balle, distance au but, distance balle but """
+        t = Tools(state,idt,idp)
+        f1 = t.p_position.distance(t.ball_position)
+        f2 = t.p_position.distance(t.cage)
+        f3 = t.ball_position.distance(t.cage)
+        f4 = t.adv_le_plus_proche().distance(t.p_position)
+        f5 = t.adv_le_plus_proche().distance(t.ball_position)
+        f6 = t.adv_le_plus_proche().distance(t.cage)
+        f7 = t.adv_le_plus_proche().distance(t.cage_adv)
+        f8 = t.p_position.distance(t.cage_adv)  
+
+        return [f1,f2,f3,f4,f5,f6,f7,f8]
+
+my_get_features.names = ["jdball","jdbut","balldbut","advdj","advdball","advdcage","advdcagea","jdcagead"]

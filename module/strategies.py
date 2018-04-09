@@ -1,9 +1,10 @@
-from soccersimulator  import Strategy, SoccerAction, Vector2D, SoccerState
+from soccersimulator  import Strategy, SoccerAction, Vector2D, SoccerState, DTreeStrategy
 from soccersimulator import SoccerTeam, Simulation, Player
 from soccersimulator import show_simu
 from soccersimulator.settings import *
 from .tools import *
 import math
+import pickle
 ## Strategie aleatoire
 class RandomStrategy(Strategy):
 	def __init__(self):
@@ -147,7 +148,7 @@ class Fonceur_dribbleur(Strategy):
 		else:
 			return SoccerAction(t.goto(t.ball_position+4*t.ball_vitesse))
 
-class Gardien(Strategy):
+class Gardien1(Strategy):
         def __init__(self):
                 Strategy.__init__(self,"Gardien")
         def compute_strategy(self,state, id_team, id_player):
@@ -161,9 +162,19 @@ class Gardien(Strategy):
                 if (t.p_position.distance(Vector2D(0,GAME_HEIGHT/2))>20):
                         return SoccerAction(t.goto(Vector2D(GAME_WIDTH/8,GAME_HEIGHT/2)))
                 
-                
+class Gardien(Strategy):
+        def __init__(self):
+                Strategy.__init__(self,"Gardien")
+        def compute_strategy(self,state, id_team, id_player):
+                t = Tools(state,id_team, id_player);
+                if t.canshoot1():
+                        return t.dribble()
+                if t.dbp()<30:
+                        return SoccerAction(t.goto(t.ball_position))
+                if (t.p_position.distance(t.cage)>20):
+                        return SoccerAction(t.goto(t.cage))                
 
-class Milieu(Strategy):
+class Milieu1(Strategy):
 	def __init__(self):
 		Strategy.__init__(self,"Milieu")
 	def compute_strategy(self,state,id_team,id_player):
@@ -173,6 +184,21 @@ class Milieu(Strategy):
 			if t.joueur_position_shoot():
 				return t.shoot_cage()
 			return t.passe()
+		elif t.au_milieu() or t.ball_avant_adv():
+			return SoccerAction(t.goto(t.ball_position+4*t.ball_vitesse))
+		else:
+			return SoccerAction(t.goto(t.cage))
+
+
+class Milieu(Strategy):
+	def __init__(self):
+		Strategy.__init__(self,"Milieu")
+	def compute_strategy(self,state,id_team,id_player):
+		t = Tools(state,id_team,id_player)	
+		if t.canshoot1():
+			if t.joueur_position_shoot():
+				return t.shoot_cage()
+			return t.dribble()
 		elif t.au_milieu() or t.ball_avant_adv():
 			return SoccerAction(t.goto(t.ball_position+4*t.ball_vitesse))
 		else:
@@ -193,3 +219,15 @@ class Defenseur(Strategy):
 		else:
 			return SoccerAction(t.goto(t.cage_adv))
 
+from tools import my_get_features
+
+class Arbre(DTreeStrategy):
+        def __init__(self):
+                #Strategy.__init__(self,"Defenseur")
+
+                dic_strategy = {FonceurStrategy().name:FonceurStrategy(),Milieu().name:Milieu(),Gardien().name:Gardien()}
+
+                with open("tree_test.pkl","rb") as f:
+                        dt = pickle.load(f)
+
+                DTreeStrategy.__init__(self, dt, dic_strategy, my_get_features)
